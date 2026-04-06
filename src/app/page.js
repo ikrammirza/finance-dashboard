@@ -1,64 +1,64 @@
-import Image from "next/image";
+"use client";
+
+import { Header } from "@/app/components/header";
+import { SummaryCards } from "@/app/components/summary-cards";
+import { TrendChart } from "@/app/components/trend-chart";
+import { CategoryBreakdown } from "@/app/components/category-breakdown";
+import { TransactionsPanel } from "@/app/components/transactions/transactions-panel";
+import { Insights } from "@/app/components/insights";
+import { useDashboard } from "@/store/dashboard-context";
 
 export default function Home() {
+  const { state } = useDashboard();
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.js file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="min-h-full">
+      <Header />
+
+      <main className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6">
+        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-500/10 via-fuchsia-500/10 to-amber-500/10 p-6 ring-1 ring-zinc-200/70 dark:ring-zinc-800/70">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(99,102,241,0.18),transparent_55%),radial-gradient(circle_at_80%_30%,rgba(217,70,239,0.16),transparent_50%)]" />
+          <div className="relative">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <div className="text-xs font-medium text-zinc-600 dark:text-zinc-300">
+                  {state.role === "admin" ? "Admin" : "Viewer"} mode
+                </div>
+                <h1 className="mt-1 text-2xl font-semibold tracking-tight sm:text-3xl">
+                  Understand your money at a glance
+                </h1>
+                <p className="mt-2 max-w-2xl text-sm text-zinc-600 dark:text-zinc-300">
+                  A focused dashboard for summary, patterns, and a searchable transaction feed. No backend — state is managed client-side.
+                </p>
+              </div>
+
+              <div className="mt-2 rounded-2xl bg-white/60 px-4 py-3 text-xs text-zinc-600 ring-1 ring-zinc-200/70 backdrop-blur-sm dark:bg-zinc-950/40 dark:text-zinc-300 dark:ring-zinc-800/70">
+                Tip: Switch to <span className="font-semibold">Admin</span> to add/edit transactions.
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        <div className="mt-5">
+          <SummaryCards transactions={state.transactions} />
         </div>
+
+        <div className="mt-5 grid grid-cols-1 gap-4 lg:grid-cols-2">
+          <TrendChart transactions={state.transactions} />
+          <CategoryBreakdown transactions={state.transactions} />
+        </div>
+
+        <div className="mt-5 grid grid-cols-1 gap-4 lg:grid-cols-3">
+          <div className="lg:col-span-2">
+            <TransactionsPanel />
+          </div>
+          <div className="lg:col-span-1">
+            <Insights transactions={state.transactions} />
+          </div>
+        </div>
+
+        <footer className="mt-8 border-t border-zinc-200/70 pt-5 text-xs text-zinc-500 dark:border-zinc-800/70 dark:text-zinc-400">
+          Built for the Zorvyn frontend evaluation — mock data, role-based UI simulation, responsive Tailwind layout.
+        </footer>
       </main>
     </div>
   );
